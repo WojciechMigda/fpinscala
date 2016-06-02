@@ -110,6 +110,8 @@ object List
     def product3(l: List[Double]) = foldLeft(l, 1.0)(_ * _)
     def length2[A](l: List[A]) = foldLeft(l, 0)((a, _) => a + 1)
 
+    def reverse[A](l: List[A]) = foldLeft(l, Nil:List[A])((xs, x) => Cons(x, xs))
+
     def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
 
@@ -189,5 +191,14 @@ object TestList
 
         println("[foldLeft] Expected: 120")
         println("[foldLeft] Actual: %d\n".format(foldLeft(List(4, 3, 5, 2), 1)(_ * _)))
+
+        println("[reverse] Expected: Nil")
+        println("[reverse] Actual: %s\n".format(reverse(Nil)))
+
+        println("[reverse] Expected: Cons(3,Nil)")
+        println("[reverse] Actual: %s\n".format(reverse(List(3))))
+
+        println("[reverse] Expected: Cons(3,Cons(4,Cons(5,Nil)))")
+        println("[reverse] Actual: %s\n".format(reverse(List(5, 4, 3))))
     }
 }
