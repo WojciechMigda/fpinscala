@@ -68,11 +68,34 @@ object List
             case Cons(lh, lt) => Cons(h, lt)
         }
 
-    def drop[A](l: List[A], n: Int): List[A] = sys.error("todo")
+    def drop[A](l: List[A], n: Int): List[A] =
+//        l match
+//        {
+//            case Nil => Nil
+//            case _ =>
+                n match
+                {
+                    case 0 => l
+                    case _ => drop(tail(l), n - 1)
+                }
+//        }
 
-    def dropWhile[A](l: List[A], f: A => Boolean): List[A] = sys.error("todo")
+    def dropWhile[A](l: List[A], f: A => Boolean): List[A] =
+        l match
+        {
+            case Nil => Nil
+            case Cons(h, t) =>
+                if (f(h)) dropWhile(t, f)
+                else l
+        }
 
-    def init[A](l: List[A]): List[A] = sys.error("todo")
+    def init[A](l: List[A]): List[A] =
+        l match
+        {
+            case Nil => Nil
+            case Cons(h, Nil) => Nil
+            case Cons(h, t) => Cons(h, init(t))
+        }
 
     def length[A](l: List[A]): Int = sys.error("todo")
 
@@ -100,5 +123,38 @@ object TestList
 
         println("[setHead] Expected: Cons(4,Cons(2,Nil))")
         println("[setHead] Actual: %s\n".format(setHead(List(1, 2), 4)))
+
+        println("[drop] Expected: Nil")
+        println("[drop] Actual: %s\n".format(drop(Nil, 0)))
+
+        println("[drop] Expected: Nil")
+        println("[drop] Actual: %s\n".format(drop(Nil, 1)))
+
+        println("[drop] Expected: Cons(1,Cons(2,Cons(3,Nil)))")
+        println("[drop] Actual: %s\n".format(drop(List(1, 2, 3), 0)))
+
+        println("[drop] Expected: Cons(3,Nil)")
+        println("[drop] Actual: %s\n".format(drop(List(1, 2, 3), 2)))
+
+        println("[dropWhile] Expected: Nil")
+        println("[dropWhile] Actual: %s\n".format(dropWhile(Nil, (h: Int) => h < 2)))
+
+        println("[dropWhile] Expected: Cons(2,Cons(3,Nil))")
+        println("[dropWhile] Actual: %s\n".format(dropWhile(List(1, 2, 3), (h: Int) => h < 2)))
+
+        println("[dropWhile] Expected: Cons(2,Cons(3,Nil))")
+        println("[dropWhile] Actual: %s\n".format(dropWhile(List(0, 1, 2, 3), (h: Int) => h < 2)))
+
+        println("[init] Expected: Nil")
+        println("[init] Actual: %s\n".format(init(Nil)))
+
+        println("[init] Expected: Nil")
+        println("[init] Actual: %s\n".format(init(List(1))))
+
+        println("[init] Expected: Cons(1,Nil)")
+        println("[init] Actual: %s\n".format(init(List(1, 2))))
+
+        println("[init] Expected: Cons(1,Cons(2,Nil))")
+        println("[init] Actual: %s\n".format(init(List(1, 2, 3))))
     }
 }
