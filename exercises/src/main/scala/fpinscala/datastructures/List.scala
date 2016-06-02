@@ -97,9 +97,14 @@ object List
             case Cons(h, t) => Cons(h, init(t))
         }
 
-    def length[A](l: List[A]): Int = sys.error("todo")
+    def length[A](l: List[A]): Int = foldRight(l, 0)((_, a) => a + 1)
 
-    def foldLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")
+    def foldLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B =
+        l match
+        {
+            case Nil => z
+            case Cons(h, t) => foldLeft(t, f(z, h))(f)
+        }
 
     def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
@@ -156,5 +161,29 @@ object TestList
 
         println("[init] Expected: Cons(1,Cons(2,Nil))")
         println("[init] Actual: %s\n".format(init(List(1, 2, 3))))
+
+        println("[length] Expected: 0")
+        println("[length] Actual: %d\n".format(length(Nil)))
+
+        println("[length] Expected: 1")
+        println("[length] Actual: %d\n".format(length(List(5))))
+
+        println("[length] Expected: 3")
+        println("[length] Actual: %d\n".format(length(List(5, 8, 10))))
+
+        println("[foldLeft] Expected: 0")
+        println("[foldLeft] Actual: %d\n".format(foldLeft(Nil:List[Int], 0)(_ + _)))
+
+        println("[foldLeft] Expected: 5")
+        println("[foldLeft] Actual: %d\n".format(foldLeft(List(3, 2), 0)(_ + _)))
+
+        println("[foldLeft] Expected: 10")
+        println("[foldLeft] Actual: %d\n".format(foldLeft(List(4, 3, 1, 2), 0)(_ + _)))
+
+        println("[foldLeft] Expected: 1")
+        println("[foldLeft] Actual: %d\n".format(foldLeft(Nil:List[Int], 1)(_ * _)))
+
+        println("[foldLeft] Expected: 120")
+        println("[foldLeft] Actual: %d\n".format(foldLeft(List(4, 3, 5, 2), 1)(_ * _)))
     }
 }
