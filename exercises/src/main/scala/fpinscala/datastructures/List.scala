@@ -112,6 +112,15 @@ object List
 
     def reverse[A](l: List[A]) = foldLeft(l, Nil:List[A])((xs, x) => Cons(x, xs))
 
+    def foldLeft2[A, B](l: List[A], z: B)(f: (B, A) => B): B =
+        foldRight(l, z)((a, b) => f(b, a))
+
+    def foldRight2[A, B](l: List[A], z: B)(f: (A, B) => B): B =
+        foldLeft(l, z)((b, a) => f(a, b))
+
+    def append2[A](lhs: List[A], rhs: List[A]): List[A] =
+        foldLeft(reverse(lhs), rhs)((xs, x) => Cons(x, xs))
+
     def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
 
@@ -200,5 +209,14 @@ object TestList
 
         println("[reverse] Expected: Cons(3,Cons(4,Cons(5,Nil)))")
         println("[reverse] Actual: %s\n".format(reverse(List(5, 4, 3))))
+
+        println("[foldLeft2] Expected: 120")
+        println("[foldLeft2] Actual: %d\n".format(foldLeft2(List(4, 3, 5, 2), 1)(_ * _)))
+
+        println("[foldRight2] Expected: 120")
+        println("[foldRight2] Actual: %d\n".format(foldRight2(List(4, 3, 5, 2), 1)(_ * _)))
+
+        println("[append2] Expected: Cons(3,Cons(4,Cons(5,Cons(6,Nil))))")
+        println("[reverse] Actual: %s\n".format(append2(List(3, 4), List(5, 6))))
     }
 }
