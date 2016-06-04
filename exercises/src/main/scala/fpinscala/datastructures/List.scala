@@ -132,6 +132,14 @@ object List
 
     def map[A, B](l: List[A])(f: A => B): List[B] =
         reverse(foldLeft(l, Nil:List[B])((xs, x) => Cons(f(x), xs)))
+
+    // ex 3.19
+    def filter[A](as: List[A])(f: A => Boolean): List[A] =
+        reverse(foldLeft(as, Nil:List[A])((xs, x) => if (f(x)) Cons(x, xs)
+                                                     else      xs))
+
+    // ex 3.20
+    def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = ???
 }
 
 object TestList
@@ -254,5 +262,8 @@ object TestList
         println(ex316(List(1, 4, 7)))
 
         println(ex317(List(1.23, 3.14, 11.00 / 7.00)))
+
+        println(filter(Nil:List[Int])(x => (x % 2) == 0))
+        println(filter(List(1, 2, 3, 4, 5, 6))(x => (x % 2) == 0))
     }
 }
