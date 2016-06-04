@@ -186,7 +186,6 @@ object TestList
 
     import List._
 
-    // test implementation of `isSorted`
     def main(args: Array[String]): Unit =
     {
         println("[tail] Expected: Nil")
@@ -311,6 +310,7 @@ object TestList
 
         println(ex322(List(1, 2, 3), List(10, 20, 30)))
 
+        println(hasSubsequence(Nil:List[Int], Nil)) // true
         println(hasSubsequence(List(1, 2, 3, 4), Nil)) // true
         println(hasSubsequence(List(1, 2, 3, 4), List(4))) // true
         println(hasSubsequence(List(1, 2, 3, 4), List(5))) // false
