@@ -162,6 +162,23 @@ object List
             case (x, Nil) => Nil
             case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), zipWith(t1, t2)(f))
         }
+
+    def hasSubsequence[A](where: List[A], what: List[A]): Boolean =
+    {
+        @annotation.tailrec
+        def go[A](where: List[A], what: List[A], initial: Boolean): Boolean =
+            (where, what) match
+            {
+                case (x, Nil) => true
+                case (Nil, x) => false
+                case (Cons(h1, t1), Cons(h2, t2)) =>
+                    if (h1 == h2) go(t1, t2, false)
+                    else if (initial) go(t1, what, true)
+                    else false
+            }
+
+        go(where, what, true)
+    }
 }
 
 object TestList
@@ -293,5 +310,12 @@ object TestList
         println(filter2(List(1, 2, 3, 4, 5, 6))(x => (x % 2) == 0))
 
         println(ex322(List(1, 2, 3), List(10, 20, 30)))
+
+        println(hasSubsequence(List(1, 2, 3, 4), Nil)) // true
+        println(hasSubsequence(List(1, 2, 3, 4), List(4))) // true
+        println(hasSubsequence(List(1, 2, 3, 4), List(5))) // false
+        println(hasSubsequence(List(1, 2, 3, 4), List(1, 2))) // true
+        println(hasSubsequence(List(1, 2, 3, 4), List(2, 3))) // true
+        println(hasSubsequence(List(1, 2, 3, 4), List(2, 4))) // false
     }
 }
