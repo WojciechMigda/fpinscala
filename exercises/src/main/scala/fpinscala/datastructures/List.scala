@@ -52,7 +52,7 @@ object List
         foldRight(ns, 0)((x, y) => x + y)
 
     def product2(ns: List[Double]) =
-        foldRight(ns, 1.0)(_ * _) // `_ * _` is more concise notation for `(x,y) => x * y`; see sidebar
+        foldRight(ns, 1.0)(_ * _)
 
     def tail[A](l: List[A]): List[A] =
         l match
@@ -120,6 +120,9 @@ object List
 
     def append2[A](lhs: List[A], rhs: List[A]): List[A] =
         foldLeft(reverse(lhs), rhs)((xs, x) => Cons(x, xs))
+
+    def concatenate[A](ll: List[List[A]]) =
+        foldLeft(ll, Nil:List[A])((p, q) => append2(p, q))
 
     def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
@@ -217,6 +220,28 @@ object TestList
         println("[foldRight2] Actual: %d\n".format(foldRight2(List(4, 3, 5, 2), 1)(_ * _)))
 
         println("[append2] Expected: Cons(3,Cons(4,Cons(5,Cons(6,Nil))))")
-        println("[reverse] Actual: %s\n".format(append2(List(3, 4), List(5, 6))))
+        println("[append2] Actual: %s\n".format(append2(List(3, 4), List(5, 6))))
+
+        println("[append2] Expected: Cons(5,Cons(6,Cons(3,Cons(4,Nil))))")
+        println("[append2] Actual: %s\n".format(append2(List(5, 6), List(3, 4))))
+
+        println("[concatenate] Expected: Nil")
+        println("[concatenate] Actual: %s\n".format(concatenate(List(Nil:List[Int], Nil:List[Int]))))
+
+        println("[concatenate] Expected: Cons(1,Nil)")
+        println("[concatenate] Actual: %s\n".format(
+                concatenate(List(List(1), Nil))))
+
+        println("[concatenate] Expected: Cons(1,Nil)")
+        println("[concatenate] Actual: %s\n".format(
+                concatenate(List(Nil, List(1)))))
+
+        println("[concatenate] Expected: Cons(2,Cons(1,Nil))")
+        println("[concatenate] Actual: %s\n".format(
+                concatenate(List(List(2), List(1)))))
+
+        println("[concatenate] Expected: List(2, 3, 6, 7, 4, 5)")
+        println("[concatenate] Actual: %s\n".format(
+                concatenate(List(List(2, 3), List(6, 7), List(4, 5)))))
     }
 }
