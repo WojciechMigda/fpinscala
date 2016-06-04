@@ -124,7 +124,14 @@ object List
     def concatenate[A](ll: List[List[A]]) =
         foldLeft(ll, Nil:List[A])((p, q) => append2(p, q))
 
-    def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
+    def ex316(l: List[Int]): List[Int] =
+        reverse(foldLeft(l, Nil:List[Int])((xs, x) => Cons(x + 1, xs)))
+
+    def ex317(l: List[Double]): List[String] =
+        reverse(foldLeft(l, Nil:List[String])((xs, x) => Cons(x.toString(), xs)))
+
+    def map[A, B](l: List[A])(f: A => B): List[B] =
+        reverse(foldLeft(l, Nil:List[B])((xs, x) => Cons(f(x), xs)))
 }
 
 object TestList
@@ -243,5 +250,9 @@ object TestList
         println("[concatenate] Expected: List(2, 3, 6, 7, 4, 5)")
         println("[concatenate] Actual: %s\n".format(
                 concatenate(List(List(2, 3), List(6, 7), List(4, 5)))))
+
+        println(ex316(List(1, 4, 7)))
+
+        println(ex317(List(1.23, 3.14, 11.00 / 7.00)))
     }
 }
