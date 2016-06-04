@@ -139,7 +139,29 @@ object List
                                                      else      xs))
 
     // ex 3.20
-    def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = ???
+    def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] =
+        concatenate(map(as)(f))
+
+    // ex 3.21
+    def filter2[A](as: List[A])(f: A => Boolean): List[A] =
+        flatMap(as)(x => if (f(x)) List(x)
+                         else Nil:List[A])
+
+    def ex322(p: List[Int], q: List[Int]): List[Int] =
+        (p, q) match
+        {
+            case (Nil, x) => Nil
+            case (x, Nil) => Nil
+            case (Cons(h1, t1), Cons(h2, t2)) => Cons(h1 + h2, ex322(t1, t2))
+        }
+
+    def zipWith[A, B, C](p: List[A], q: List[B])(f: (A, B) => C): List[C] =
+        (p, q) match
+        {
+            case (Nil, x) => Nil
+            case (x, Nil) => Nil
+            case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), zipWith(t1, t2)(f))
+        }
 }
 
 object TestList
@@ -265,5 +287,11 @@ object TestList
 
         println(filter(Nil:List[Int])(x => (x % 2) == 0))
         println(filter(List(1, 2, 3, 4, 5, 6))(x => (x % 2) == 0))
+
+        println(flatMap(List(1, 2, 3))(i => List(i, i)))
+
+        println(filter2(List(1, 2, 3, 4, 5, 6))(x => (x % 2) == 0))
+
+        println(ex322(List(1, 2, 3), List(10, 20, 30)))
     }
 }
