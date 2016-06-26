@@ -85,6 +85,9 @@ object Tree
 
     def folded_depth[A](t: Tree[A]): Int =
         fold(t)(_ => 0)((l, r) => 1 + l.max(r))
+
+    def folded_map[A, B](t: Tree[A])(f: A => B): Tree[B] =
+        fold[A, Tree[B]](t)(x => Leaf(f(x)))((l, r) => Branch(l, r))
 }
 
 object TestTree
@@ -139,5 +142,10 @@ object TestTree
 
         println("[folded_depth] Expected: 2")
         println("[folded_depth] Actual: %s\n".format(folded_depth(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))))
+
+        println("[folded_map] Actual: %s\n".format(
+                folded_map(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))(x => x * x))
+                )
+
     }
 }
