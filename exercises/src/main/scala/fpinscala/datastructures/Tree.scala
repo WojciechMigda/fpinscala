@@ -65,7 +65,22 @@ object Tree
         }
 
     // 3.29
-//    def fold[A, B](t: Tree[A])(
+    def fold[A, B](t: Tree[A])(l: A => B)(b: (B, B) => B): B =
+    {
+        def loop(t: Tree[A]): B =
+            t match
+            {
+                case Leaf(a) => l(a)
+                case Branch(left, right) => b(loop(left), loop(right))
+            }
+
+        loop(t)
+    }
+
+    def folded_size[A](t: Tree[A]): Int =
+        fold(t)(_ => 1)((l, r) => l + r + 1)
+
+
 }
 
 object TestTree
@@ -99,5 +114,15 @@ object TestTree
         println("[map] Actual: %s\n".format(
                 map(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))(x => x * x))
                 )
+
+        println("[folded_size] Expected: 1")
+        println("[folded_size] Actual: %s\n".format(folded_size(Leaf(5))))
+
+        println("[folded_size] Expected: 3")
+        println("[folded_size] Actual: %s\n".format(folded_size(Branch(Leaf(5), Leaf(7)))))
+
+        println("[folded_size] Expected: 5")
+        println("[folded_size] Actual: %s\n".format(folded_size(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))))
+
     }
 }
