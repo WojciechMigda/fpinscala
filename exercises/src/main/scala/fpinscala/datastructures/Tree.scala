@@ -80,7 +80,11 @@ object Tree
     def folded_size[A](t: Tree[A]): Int =
         fold(t)(_ => 1)((l, r) => l + r + 1)
 
+    def folded_max(t: Tree[Int]): Int =
+        fold(t)(x => x)((l, r) => l.max(r))
 
+    def folded_depth[A](t: Tree[A]): Int =
+        fold(t)(_ => 0)((l, r) => 1 + l.max(r))
 }
 
 object TestTree
@@ -124,5 +128,16 @@ object TestTree
         println("[folded_size] Expected: 5")
         println("[folded_size] Actual: %s\n".format(folded_size(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))))
 
+        println("[folded_max] Expected: 9")
+        println("[folded_max] Actual: %s\n".format(folded_max(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))))
+
+        println("[folded_depth] Expected: 0")
+        println("[folded_depth] Actual: %s\n".format(folded_depth(Leaf(5))))
+
+        println("[folded_depth] Expected: 1")
+        println("[folded_depth] Actual: %s\n".format(folded_depth(Branch(Leaf(5), Leaf(7)))))
+
+        println("[folded_depth] Expected: 2")
+        println("[folded_depth] Actual: %s\n".format(folded_depth(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))))
     }
 }
