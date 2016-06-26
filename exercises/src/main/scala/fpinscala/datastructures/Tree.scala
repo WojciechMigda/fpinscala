@@ -46,10 +46,23 @@ object Tree
     }
 
     def depth[A](t: Tree[A]): Int =
-        ???
+    {
+        def loop[A](t: Tree[A], d: Int): Int =
+            t match
+            {
+                case Leaf(_) => d
+                case Branch(l, r) => 1 + d + loop(l, 0).max(loop(r, 0))
+            }
+
+        loop(t, 0)
+    }
 
     def map[A, B](t: Tree[A])(f: A => B): Tree[B] =
-        ???
+        t match
+        {
+            case Leaf(a) => Leaf(f(a))
+            case Branch(a1, a2) => Branch(map(a1)(f), map(a2)(f))
+        }
 
     // 3.29
 //    def fold[A, B](t: Tree[A])(
@@ -62,16 +75,29 @@ object TestTree
 
     def main(args: Array[String]): Unit =
     {
-        println("[tail] Expected: 1")
-        println("[tail] Actual: %s\n".format(size(Leaf(5))))
+        println("[size] Expected: 1")
+        println("[size] Actual: %s\n".format(size(Leaf(5))))
 
-        println("[tail] Expected: 3")
-        println("[tail] Actual: %s\n".format(size(Branch(Leaf(5), Leaf(7)))))
+        println("[size] Expected: 3")
+        println("[size] Actual: %s\n".format(size(Branch(Leaf(5), Leaf(7)))))
 
-        println("[tail] Expected: 5")
-        println("[tail] Actual: %s\n".format(size(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))))
+        println("[size] Expected: 5")
+        println("[size] Actual: %s\n".format(size(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))))
 
-        println("[tail] Expected: 9")
-        println("[tail] Actual: %s\n".format(maximum(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))))
+        println("[maximum] Expected: 9")
+        println("[maximum] Actual: %s\n".format(maximum(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))))
+
+        println("[depth] Expected: 0")
+        println("[depth] Actual: %s\n".format(depth(Leaf(5))))
+
+        println("[depth] Expected: 1")
+        println("[depth] Actual: %s\n".format(depth(Branch(Leaf(5), Leaf(7)))))
+
+        println("[depth] Expected: 2")
+        println("[depth] Actual: %s\n".format(depth(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))))
+
+        println("[map] Actual: %s\n".format(
+                map(Branch(Leaf(5), Branch(Leaf(9), Leaf(7))))(x => x * x))
+                )
     }
 }
