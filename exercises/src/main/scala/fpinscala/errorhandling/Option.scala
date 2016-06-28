@@ -11,11 +11,21 @@ sealed trait Option[+A]
             case Some(a) => Some(f(a))
         }
 
-    def getOrElse[B >: A](default: => B): B = sys.error("todo")
+    def getOrElse[B >: A](default: => B): B =
+        this match
+        {
+            case None => default
+            case Some(a) => a
+        }
 
     def flatMap[B](f: A => Option[B]): Option[B] = sys.error("todo")
 
-    def orElse[B >: A](ob: => Option[B]): Option[B] = sys.error("todo")
+    def orElse[B >: A](ob: => Option[B]): Option[B] =
+        this match
+        {
+            case None => ob
+            case Some(_) => this
+        }
 
     def filter(f: A => Boolean): Option[A] = sys.error("todo")
 }
@@ -31,6 +41,18 @@ object TestOption
 
         println("[map] Expected: Some(49)")
         println("[map] Actual: %s\n".format(Some(7).map((x: Int) => x * x)))
+
+        println("[getOrElse] Expected: 3")
+        println("[getOrElse] Actual: %s\n".format(None.getOrElse(3)))
+
+        println("[getOrElse] Expected: 7")
+        println("[getOrElse] Actual: %s\n".format(Some(7).getOrElse(3)))
+
+        println("[orElse] Expected: Some(3)")
+        println("[orElse] Actual: %s\n".format(None.orElse(Some(3))))
+
+        println("[orElse] Expected: Some(7)")
+        println("[orElse] Actual: %s\n".format(Some(7).orElse(Some(3))))
     }
 }
 
